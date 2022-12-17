@@ -1,5 +1,3 @@
-import { Prisma, PrismaClient } from '@prisma/client'
-
 const superagent = require('superagent')
 
 const QUERY_INTERVAL = 60000 // 60 sec
@@ -25,18 +23,18 @@ const makeDataPoint = async (database: any, dataPoint: any) => {
 }
 
 const getCurrentDataPoint = () => {
-  return {text: '{"data" :{"id": "820003CB", "type": "82", "temperature": 24.45,' + 
-  ' "humidity": 48.65, "voc": 162765, "co2": 718, "ch2o": 16, "o3": 20, "pm1": 0, ' +
-  '"pm25": 1, "pm10": 1, "noise": 72.08, "uptime": 404 }}'} //example data
-    // let res = undefined
-    // while(!res){
-    //   console.log("requesting")
-    //   try{
-    //     res = superagent.get("http://192.168.4.1/j").timeout(5000)
-    //   }
-    //   catch(error){ res = undefined}
-    // }
-    // return res
+  // return {text: '{"data" :{"id": "820003CB", "type": "82", "temperature": 24.45,' + 
+  // ' "humidity": 48.65, "voc": 162765, "co2": 718, "ch2o": 16, "o3": 20, "pm1": 0, ' +
+  // '"pm25": 1, "pm10": 1, "noise": 72.08, "uptime": 404 }}'} //example data
+    let res = undefined
+    while(!res){
+      console.log("requesting")
+      try{
+        res = superagent.get("http://192.168.4.1/j").timeout(40000)
+      }
+      catch(error){ res = undefined}
+    }
+    return res
 }
 
 const querySensor = async (database: any, id: string, sessionId: number) : Promise<{ id: string; sessionId: number }> => {
