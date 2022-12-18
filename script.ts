@@ -6,12 +6,13 @@ const TIMEOUT = 40000 // 40 sec
 // const APP_URL = 'http://localhost:8910'
 
 const makeNewSession = async (sensorId: string) => {
-  return superagent.post(process.env.APP_URL + '/.netlify/functions/createSession').send({sensorId, secret: process.env.SENSOR_SECRET}).then((res: Response) => {
+  const data = superagent.post(process.env.APP_URL + '/.netlify/functions/createSession').send({sensorId, secret: process.env.SENSOR_SECRET}).then((res: Response) => {
     return res.text
   }).catch((error: any) => {
     console.error("Error making new session")
     console.error(error.response?.body)
   })
+  return data ? JSON.parse(data)?.sessonId : null
 }
 
 const makeDataPoint = async (dataPoint: any) => {
@@ -40,13 +41,13 @@ const querySensor = async (id: string, sessionId: string) : Promise<{ id: string
         if(dataPoint){
           if(!sessionId && dataPoint.id){
             id = dataPoint.id
-            sessionId = JSON.parse(await makeNewSession(dataPoint.id))?.sessionId
+            sessionId = await makeNewSession(dataPoint.id)
           }
           dataPoint.sessionId = sessionId
           await makeDataPoint(dataPoint)
         }
       }
-      catch(error) {console.error("Query Sensor error" + error)}
+      catch(error) {console.error("Query Sensor error " + error)}
         resolve({id, sessionId})
     })
 }
