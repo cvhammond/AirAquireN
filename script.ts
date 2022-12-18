@@ -13,7 +13,7 @@ const makeNewSession = async (sensorId: string) => {
     console.error("Error making new session")
     console.error(error.response?.body)
   })
-  return data.sessionId ??  null
+  return data?.sessionId ??  null
 }
 
 const makeDataPoint = async (dataPoint: any) => {
@@ -24,15 +24,15 @@ const makeDataPoint = async (dataPoint: any) => {
 }
 
 const getCurrentDataPoint = async () => {
-  return {"id": "820003CB", "type": "82", "temperature": 24.45, "humidity": 48.65,
-   "voc": 162765, "co2": 718, "ch2o": 16, "o3": 20, "pm1": 0, "pm25": 1, "pm10": 1,
-    "noise": 72.08, "uptime": 404, sessionId: '' } //example data
-  // const data = await superagent.get("http://192.168.4.1/j").timeout(TIMEOUT).then((res: Response) => {
-  //   return res.text
-  // }).catch((error: any) => {
-  //   console.error("Error getting data from sensor", error.response?.body)
-  // })
-  // return data ? JSON.parse(data)?.data : null
+  // return {"id": "820003CB", "type": "82", "temperature": 24.45, "humidity": 48.65,
+  //  "voc": 162765, "co2": 718, "ch2o": 16, "o3": 20, "pm1": 0, "pm25": 1, "pm10": 1,
+  //   "noise": 72.08, "uptime": 404, sessionId: '' } //example data
+  const data = await superagent.get("http://192.168.4.1/j").timeout(TIMEOUT).then((res: any) => {
+    return JSON.parse(res.text)
+  }).catch((error: any) => {
+    console.error("Error getting data from sensor", error.response?.body)
+  })
+  return data?.data ?? null
 }
 
 const querySensor = async (id: string, sessionId: string) : Promise<{ id: string; sessionId: string }> => {
