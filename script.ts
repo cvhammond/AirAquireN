@@ -1,5 +1,6 @@
-
+require('dotenv').config()
 const superagent = require('superagent')
+
 
 const QUERY_INTERVAL = 60000 // 60 sec
 const TIMEOUT = 40000 // 40 sec
