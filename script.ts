@@ -2,13 +2,11 @@
 const superagent = require('superagent')
 
 const QUERY_INTERVAL = 60000 // 60 sec
-const TIMEOUT = 40000 // 10 sec
-const SENSOR_SECRET = '+LxdhjW9ZNktkwNpwi5lmCNg3y0W'
-const APP_URL = 'http://airvisn.netlify.app'
+const TIMEOUT = 40000 // 40 sec
 // const APP_URL = 'http://localhost:8910'
 
 const makeNewSession = async (sensorId: string) => {
-  return superagent.post(APP_URL + '/.netlify/functions/createSession').send({sensorId, secret: SENSOR_SECRET}).then((res: Response) => {
+  return superagent.post(process.env.APP_URL + '/.netlify/functions/createSession').send({sensorId, secret: process.env.SENSOR_SECRET}).then((res: Response) => {
     return res.text
   }).catch((error: any) => {
     console.error("Error making new session")
@@ -17,7 +15,7 @@ const makeNewSession = async (sensorId: string) => {
 }
 
 const makeDataPoint = async (dataPoint: any) => {
-    superagent.post(APP_URL + '/.netlify/functions/createDataPoint').send({...dataPoint})
+    superagent.post(process.env.APP_URL + '/.netlify/functions/createDataPoint').send({...dataPoint})
     .catch((error: any) => {
       console.error("Error making data point")
       console.error(error.response?.body)})
