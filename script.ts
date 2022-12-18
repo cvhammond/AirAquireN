@@ -6,7 +6,7 @@ const TIMEOUT = 40000 // 40 sec
 // const APP_URL = 'http://localhost:8910'
 
 const makeNewSession = async (sensorId: string) => {
-  const data = superagent.post(process.env.APP_URL + '/.netlify/functions/createSession').send({sensorId, secret: process.env.SENSOR_SECRET}).then((res: Response) => {
+  const data = await superagent.post(process.env.APP_URL + '/.netlify/functions/createSession').send({sensorId, secret: process.env.SENSOR_SECRET}).then((res: Response) => {
     return res.text
   }).catch((error: any) => {
     console.error("Error making new session")
